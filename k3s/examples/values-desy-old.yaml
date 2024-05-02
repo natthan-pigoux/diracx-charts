@@ -1,0 +1,69 @@
+global:
+  # Override the imagePullPolicy to always so we can using latest image tags
+  # without risking them being outdated.
+  imagePullPolicy: Always
+
+namespace: npigoux-test
+developer:
+  enabled: false
+  urls:
+    diracx: https://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:8000
+    minio: http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32000
+    dex: http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32002
+  demoDir: {{ demo_dir }}
+  mountedPythonModulesToInstall: {{ mounted_python_modules }}
+  editableMountedPythonModules: {{ editable_mounted_modules }}
+  nodeModuleToInstall: {{ node_module_to_mount }}
+
+init-cs:
+  VOs:
+    - name: diracAdmin
+      IdP:
+        idp_url: http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32002
+        idp_client_id: d396912e-2f04-439b-8ae7-d8c585a34790
+      defaultGroup: admin
+      Users:
+      - sub: EgVsb2NhbA
+        preferredUsername: admin
+        groups:
+          - admin
+        # TODO: Integrate with dex
+
+diracx:
+  hostname: rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local
+  settings:
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:8000/api/docs/oauth2-redirect", "https://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:8000/#authentication-callback"]'
+    DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
+    DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
+    DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
+  sqlDbs:
+    dbs:
+      AuthDB:
+      JobDB:
+      JobLoggingDB:
+      SandboxMetadataDB:
+      TaskQueueDB:
+  osDbs:
+    dbs:
+      JobParametersDB:
+
+minio:
+  environment:
+    MINIO_BROWSER_REDIRECT_URL: http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32001/
+
+dex:
+  config:
+    issuer: http://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:32002
+
+    staticClients:
+    - id: d396912e-2f04-439b-8ae7-d8c585a34790
+      public: true
+      name: 'CLI app'
+      redirectURIs:
+        - 'https://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:8000/api/auth/device/complete'
+        - https://rancher-cta-dev.zeuthen.desy.de/k8s/clusters/local:8000/api/auth/authorize/complete
+
+    staticPasswords:
+      - email: "admin@example.com"
+        hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+        username: "admin"
