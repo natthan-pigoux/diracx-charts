@@ -10,6 +10,9 @@ diracx:
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
     DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-minio:9000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
+    DIRACX_OTEL_ENABLED: "{{ open_telemetry }}"
+    DIRACX_OTEL_GRPC_ENDPOINT: "diracx-demo-opentelemetry-collector:4317"
+    DIRACX_OTEL_GRPC_INSECURE: "true"
   sqlDbs:
     dbs:
       AuthDB:
@@ -30,8 +33,17 @@ ingress:
 developer:
   enabled: false
 
+cert-manager:
+  enabled: false
 
-
+mysql:
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 30
+    successThreshold: 1
 dex:
   config:
     issuer: http://rancher-cta-dev.zeuthen.desy.de:32002
