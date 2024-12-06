@@ -1,28 +1,40 @@
 global:
   storageClassName: longhorn
+  # images:
+  #   tag: "dev"
+  #   # TODO: We should use the base images here but pythonModulesToInstall would need to be split
+  #   services: ghcr.io/diracgrid/diracx/services
+  #   client: ghcr.io/diracgrid/diracx/client
 
 diracx:
-  hostname: rancher-cta-dev.zeuthen.desy.de
+  #hostname: diracx-cert.app.zeuthen.desy.de
+  hostname: diracx-cert.app.zeuthen.desy.de
   service:
     port: 8000
   settings:
-    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://rancher-cta-dev.zeuthen.desy.de/api/docs/oauth2-redirect","https://rancher-cta-dev.zeuthen.desy.de/#authentication-callback"]'
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://diracx-cert.app.zeuthen.desy.de/api/docs/oauth2-redirect","https://diracx-cert.app.zeuthen.desy.de/#authentication-callback"]'
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
     DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-minio:9000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
     DIRACX_OTEL_ENABLED: "{{ open_telemetry }}"
     DIRACX_OTEL_GRPC_ENDPOINT: "diracx-demo-opentelemetry-collector:4317"
     DIRACX_OTEL_GRPC_INSECURE: "true"
-  sqlDbs:
-    dbs:
-      AuthDB:
-      JobDB:
-      JobLoggingDB:
-      SandboxMetadataDB:
-      TaskQueueDB:
+    DIRACX_CONFIG_BACKEND_URL: "git+file:///gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration/cs.yaml"
+    #DIRACX_SERVICE_AUTH_TOKEN_KEY: "file:///signing-key/rsa256.key"
+  # sqlDbs:
+  #   dbs:
+  #     AuthDB:
+  #     JobDB:
+  #     JobLoggingDB:
+  #     SandboxMetadataDB:
+  #     TaskQueueDB:
   osDbs:
     dbs:
       JobParametersDB:
+  # pythonModulesToInstall:
+  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_core&subdirectory=diracx-core"
+  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_db&subdirectory=diracx-db"
+  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_routers&subdirectory=diracx-routers"
 
 ingress:
   enabled: true
@@ -37,6 +49,7 @@ cert-manager:
   enabled: false
 
 mysql:
+  enabled: false
   startupProbe:
     enabled: true
     initialDelaySeconds: 15
@@ -46,15 +59,15 @@ mysql:
     successThreshold: 1
 dex:
   config:
-    issuer: http://rancher-cta-dev.zeuthen.desy.de:32002
+    issuer: http://diracx-cert.app.zeuthen.desy.de:32002
 
     staticClients:
     - id: d396912e-2f04-439b-8ae7-d8c585a34790
       public: true
       name: 'CLI app'
       redirectURIs:
-        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/device/complete'
-        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/authorize/complete'
+        - 'https://diracx-cert.app.zeuthen.desy.de/api/auth/device/complete'
+        - 'https://diracx-cert.app.zeuthen.desy.de/api/auth/authorize/complete'
 
     staticPasswords:
       - email: "admin@example.com"
