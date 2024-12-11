@@ -7,7 +7,7 @@ global:
   #   client: ghcr.io/diracgrid/diracx/client
 
 diracx:
-  #hostname: diracx-cert.app.zeuthen.desy.de
+  #hostname: rancher-cta-dev.zeuthen.desy.de
   hostname: diracx-cert.app.zeuthen.desy.de
   service:
     port: 8000
