@@ -7,18 +7,16 @@ global:
   #   client: ghcr.io/diracgrid/diracx/client
 
 diracx:
-  #hostname: rancher-cta-dev.zeuthen.desy.de
-  hostname: diracx-cert.app.zeuthen.desy.de
+  # TODO: which hostname shoudl I use ? 
+  hostname: rancher-cta-dev.zeuthen.desy.de
+  #hostname: diracx-cert.app.zeuthen.desy.de
   service:
     port: 8000
   settings:
-    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://diracx-cert.app.zeuthen.desy.de/api/docs/oauth2-redirect","https://diracx-cert.app.zeuthen.desy.de/#authentication-callback"]'
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://rancher-cta-dev.zeuthen.desy.de/api/docs/oauth2-redirect","https://rancher-cta-dev.zeuthen.desy.de/#authentication-callback"]'
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
     DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-minio:9000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
-    DIRACX_OTEL_ENABLED: "{{ open_telemetry }}"
-    DIRACX_OTEL_GRPC_ENDPOINT: "diracx-demo-opentelemetry-collector:4317"
-    DIRACX_OTEL_GRPC_INSECURE: "true"
     DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/natthan.pigoux/cs_store.git"
     #DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration.git"
     #DIRACX_SERVICE_AUTH_TOKEN_KEY: "file:///signing-key/rsa256.key"
@@ -42,6 +40,18 @@ diracx:
   #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_core&subdirectory=diracx-core"
   #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_db&subdirectory=diracx-db"
   #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_routers&subdirectory=diracx-routers"
+
+# TODO: Set LoadBalancer and external-dns ingress for the web app
+# References to look at:
+# * loadbalancer [metallb](https://metallb.universe.tf/)
+# * [external dns ](https://github.com/kubernetes-sigs/external-dns)
+
+# Few tutorials:
+# * https://particule.io/en/blog/k8s-no-cloud/
+# * https://datavirke.dk/posts/bare-metal-kubernetes-part-4-ingress-dns-certificates/
+
+# LB: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/load-balancer.yaml?ref_type=heads
+# ExtDNS ingress: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/ingress.yaml?ref_type=heads
 
 ingress:
   enabled: true
@@ -71,15 +81,15 @@ mysql:
     successThreshold: 1
 dex:
   config:
-    issuer: http://diracx-cert.app.zeuthen.desy.de:32002
+    issuer: http://rancher-cta-dev.zeuthen.desy.de:32002
 
     staticClients:
     - id: d396912e-2f04-439b-8ae7-d8c585a34790
       public: true
       name: 'CLI app'
       redirectURIs:
-        - 'https://diracx-cert.app.zeuthen.desy.de/api/auth/device/complete'
-        - 'https://diracx-cert.app.zeuthen.desy.de/api/auth/authorize/complete'
+        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/device/complete'
+        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/authorize/complete'
 
     staticPasswords:
       - email: "admin@example.com"
