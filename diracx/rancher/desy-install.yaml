@@ -8,14 +8,15 @@ global:
 
 diracx:
   # TODO: which hostname shoudl I use ? 
-  hostname: rancher-cta-dev.zeuthen.desy.de
+  #hostname: rancher-cta-dev.zeuthen.desy.de
   #hostname: diracx-cert.app.zeuthen.desy.de
-  service:
-    port: 8000
+  hostname: dcta-k8.cta-test.zeuthen.desy.de
+  # service:
+  #   port: 8000
   settings:
-    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://rancher-cta-dev.zeuthen.desy.de/api/docs/oauth2-redirect","https://rancher-cta-dev.zeuthen.desy.de/#authentication-callback"]'
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://dcta-k8.cta-test.zeuthen.desy.de:8000/api/docs/oauth2-redirect","https://dcta-k8.cta-test.zeuthen.desy.de:8000/#authentication-callback"]'
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
-    DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-minio:9000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
+    DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://dcta-k8.cta-test.zeuthen.desy.de:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
     DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/natthan.pigoux/cs_store.git"
     #DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration.git"
@@ -53,6 +54,10 @@ diracx:
 # LB: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/load-balancer.yaml?ref_type=heads
 # ExtDNS ingress: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/ingress.yaml?ref_type=heads
 
+minio:
+  environment:
+    MINIO_BROWSER_REDIRECT_URL: http://dcta-k8.cta-test.zeuthen.desy.de:32001/
+
 ingress:
   enabled: true
   className: "traefik"
@@ -70,6 +75,12 @@ initSql:
   enabled: False
   env: {}
 
+rabbitmq:
+  podSecurityContext:
+    enabled: true
+  containerSecurityContext:
+    enabled: true
+    
 mysql:
   enabled: false
   startupProbe:
@@ -81,15 +92,15 @@ mysql:
     successThreshold: 1
 dex:
   config:
-    issuer: http://rancher-cta-dev.zeuthen.desy.de:32002
+    issuer: http://dcta-k8.cta-test.zeuthen.desy.de:32002
 
     staticClients:
     - id: d396912e-2f04-439b-8ae7-d8c585a34790
       public: true
       name: 'CLI app'
       redirectURIs:
-        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/device/complete'
-        - 'https://rancher-cta-dev.zeuthen.desy.de/api/auth/authorize/complete'
+        - 'https://dcta-k8.cta-test.zeuthen.desy.de/api/auth/device/complete'
+        - 'https://dcta-k8.cta-test.zeuthen.desy.de/api/auth/authorize/complete'
 
     staticPasswords:
       - email: "admin@example.com"
