@@ -1,28 +1,20 @@
 global:
   storageClassName: longhorn
-  # images:
-  #   tag: "dev"
-  #   # TODO: We should use the base images here but pythonModulesToInstall would need to be split
-  #   services: ghcr.io/diracgrid/diracx/services
-  #   client: ghcr.io/diracgrid/diracx/client
 
 diracx:
-  # TODO: which hostname shoudl I use ? 
-  #hostname: rancher-cta-dev.zeuthen.desy.de
-  #hostname: diracx-cert.app.zeuthen.desy.de
-  hostname: dcta-k8.cta-test.zeuthen.desy.de
-  # service:
-  #   port: 8000
+  hostname: diracx-cert.cta-test.zeuthen.desy.de # test-cluster dns zone is cta-test.zeuthen.desy.de
   settings:
-    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://dcta-k8.cta-test.zeuthen.desy.de:8000/api/docs/oauth2-redirect","https://dcta-k8.cta-test.zeuthen.desy.de:8000/#authentication-callback"]'
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://diracx-cert.cta-test.zeuthen.desy.de:8000/api/docs/oauth2-redirect","https://diracx-cert.cta-test.zeuthen.desy.de:8000/#authentication-callback"]'
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
-    DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://dcta-k8.cta-test.zeuthen.desy.de:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
+    DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-cert.cta-test.zeuthen.desy.de:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
     DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/natthan.pigoux/cs_store.git"
     #DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration.git"
-    #DIRACX_SERVICE_AUTH_TOKEN_KEY: "file:///signing-key/rsa256.key"
+
+  # use Majestix DBs
   sqlDbs:
     default:
+      # need to put this into a secret
       rootUser: root
       rootPassword: rRb9nsprhJsCAQx
       user: Dirac
@@ -37,32 +29,20 @@ diracx:
   osDbs:
     dbs:
       JobParametersDB:
-  # pythonModulesToInstall:
-  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_core&subdirectory=diracx-core"
-  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_db&subdirectory=diracx-db"
-  #   - "git+https://github.com/USERNAME/diracx.git@BRANCH_NAME#egg=diracx_routers&subdirectory=diracx-routers"
-
-# TODO: Set LoadBalancer and external-dns ingress for the web app
-# References to look at:
-# * loadbalancer [metallb](https://metallb.universe.tf/)
-# * [external dns ](https://github.com/kubernetes-sigs/external-dns)
-
-# Few tutorials:
-# * https://particule.io/en/blog/k8s-no-cloud/
-# * https://datavirke.dk/posts/bare-metal-kubernetes-part-4-ingress-dns-certificates/
-
-# LB: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/load-balancer.yaml?ref_type=heads
-# ExtDNS ingress: https://gitlab.cta-observatory.org/cta-computing/dpps/workload/CTADIRAC-charts/-/blob/main/charts/templates/ingress.yaml?ref_type=heads
 
 minio:
   environment:
-    MINIO_BROWSER_REDIRECT_URL: http://dcta-k8.cta-test.zeuthen.desy.de:32001/
+    MINIO_BROWSER_REDIRECT_URL: http://diracx-cert.cta-test.zeuthen.desy.de:32001/
 
 ingress:
   enabled: true
-  className: "traefik"
+  className: "nginx" # use the installed nginx ingress controller instead of traefik
   tlsSecretName: myingress-cert
-  annotations: {}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: diracx-cert.cta-test.zeuthen.desy.de
+  DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS:
+    loadBalancerIP: 141.34.51.79
+  #annotations: {}
 
 developer:
   enabled: false
@@ -72,15 +52,18 @@ cert-manager:
 
 initSql:
   # Should DiracX include an init container which manages the SQL DB schema?
+  # Since we use the Majestix DBs, we don't need this
   enabled: False
   env: {}
 
+# To fix rabbitmq background startup issue
 rabbitmq:
   podSecurityContext:
     enabled: true
   containerSecurityContext:
     enabled: true
-    
+
+# enable mysql since we use Majestix DBs
 mysql:
   enabled: false
   startupProbe:
@@ -92,15 +75,15 @@ mysql:
     successThreshold: 1
 dex:
   config:
-    issuer: http://dcta-k8.cta-test.zeuthen.desy.de:32002
+    issuer: http://diracx-cert.cta-test.zeuthen.desy.de:32002
 
     staticClients:
     - id: d396912e-2f04-439b-8ae7-d8c585a34790
       public: true
       name: 'CLI app'
       redirectURIs:
-        - 'https://dcta-k8.cta-test.zeuthen.desy.de/api/auth/device/complete'
-        - 'https://dcta-k8.cta-test.zeuthen.desy.de/api/auth/authorize/complete'
+        - 'https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/device/complete'
+        - 'https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/authorize/complete'
 
     staticPasswords:
       - email: "admin@example.com"
