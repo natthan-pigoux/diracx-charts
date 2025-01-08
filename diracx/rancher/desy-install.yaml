@@ -76,12 +76,14 @@ mysql:
     successThreshold: 1
 dex:
   config:
-    issuer: http://diracx-cert.cta-test.zeuthen.desy.de:32002
+    issuer: https://iam-ctao.cloud.cnaf.infn.it
 
     staticClients:
-    - id: d396912e-2f04-439b-8ae7-d8c585a34790
-      public: true
-      name: 'CLI app'
+    - id: 33477569-e6a9-4630-8f5c-b9db028378f2
+      public: false
+      name: 'DiracX app'
+      # Find another way to store this or use a public client
+      secret: UNBJqpjy9-Z6Ma6kudHuvDmP8ywsTq6-PotD3EdLs6DtmuWseK2UJnrsEysX5D0P3dcbpqLAdoKxPYE80xS8Gg
       redirectURIs:
         - 'https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/device/complete'
         - 'https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/authorize/complete'
