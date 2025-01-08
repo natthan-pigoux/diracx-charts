@@ -36,17 +36,17 @@ minio:
 
 ingress:
   enabled: true
-  className: "nginx" # use the installed nginx ingress controller instead of traefik
+  className: "nginx" # Use the installed nginx ingress controller instead of traefik
   tlsSecretName: myingress-cert
   annotations:
     external-dns.alpha.kubernetes.io/hostname: diracx-cert.cta-test.zeuthen.desy.de
-  DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS:
-    loadBalancerIP: 141.34.51.79
-  #annotations: {}
+  # Specific IP used for external access
+  loadBalancerIP: 141.34.51.79
 
 developer:
   enabled: false
 
+# Disable cert-manager since it already exists in the cluster
 cert-manager:
   enabled: false
 
