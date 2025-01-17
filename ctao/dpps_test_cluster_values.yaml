@@ -4,7 +4,7 @@ global:
 diracx:
   hostname: diracx-cert.cta-test.zeuthen.desy.de # test-cluster dns zone is cta-test.zeuthen.desy.de
   settings:
-    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://diracx-cert.cta-test.zeuthen.desy.de:8000/api/docs/oauth2-redirect","https://diracx-cert.cta-test.zeuthen.desy.de:8000/#authentication-callback"]'
+    DIRACX_SERVICE_AUTH_ALLOWED_REDIRECTS: '["https://diracx-cert.cta-test.zeuthen.desy.de/api/docs/oauth2-redirect","https://diracx-cert.cta-test.zeuthen.desy.de/#authentication-callback"]'
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
     DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-cert.cta-test.zeuthen.desy.de:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
