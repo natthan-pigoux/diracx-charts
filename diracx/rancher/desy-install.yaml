@@ -84,7 +84,7 @@ dex:
     issuer: https://diracx-cert.cta-test.zeuthen.desy.de:32002
 
     staticClients:
-      - id: 33477569-e6a9-4630-8f5c-b9db028378f2
+      - id: 849a153b-74e8-46ab-8c60-b30da25a36fb
         public: true
         name: 'ctao-wms-auth'
         redirectURIs:
@@ -95,33 +95,3 @@ dex:
       - email: "admin@example.com"
         hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
         username: "admin"
-  #config:
-    #issuer: https://iam-ctao.cloud.cnaf.infn.it/
-    # issuer: https://diracx-cert.cta-test.zeuthen.desy.de:32002
-    # # storage:
-    # #   type: kubernetes
-    # #   config:
-    # #     inCluster: true
-    # # web:
-    # #   http: https://diracx-cert.cta-test.zeuthen.desy.de:32002
-    # enableDebug: true
-    # connectors:
-    #   - type: oidc
-    #     id: ctao-wms-auth
-    #     name: "IAM CTAO"
-    #     config:
-    #       issuer: https://iam-ctao.cloud.cnaf.infn.it/
-    #       clientID: 33477569-e6a9-4630-8f5c-b9db028378f2
-    #       clientSecret: UNBJqpjy9-Z6Ma6kudHuvDmP8ywsTq6-PotD3EdLs6DtmuWseK2UJnrsEysX5D0P3dcbpqLAdoKxPYE80xS8Gg
-    #       #redirectURI: https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/authorize/complete
-    #       redirectURIs:
-    #         - "https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/device/complete"
-    #         - "https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/authorize/complete"
-
-    # staticClients:
-    #   - id: d396912e-2f04-439b-8ae7-d8c585a34790
-    #     public: true
-    #     name: "CLI app"
-    #     redirectURIs:
-    #       - "https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/device/complete"
-    #       - "https://diracx-cert.cta-test.zeuthen.desy.de/api/auth/authorize/complete"
