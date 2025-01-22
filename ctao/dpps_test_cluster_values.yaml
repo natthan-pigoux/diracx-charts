@@ -8,10 +8,9 @@ diracx:
     DIRACX_SANDBOX_STORE_BUCKET_NAME: demo-sandboxes
     DIRACX_SANDBOX_STORE_S3_CLIENT_KWARGS: '{"endpoint_url": "http://diracx-cert.cta-test.zeuthen.desy.de:32000", "aws_access_key_id": "console", "aws_secret_access_key": "console123"}'
     DIRACX_SANDBOX_STORE_AUTO_CREATE_BUCKET: "true"
-    DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/natthan.pigoux/cs_store.git" # specific branch name with @main
-    #DIRACX_CONFIG_BACKEND_URL: "git+https://gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration.git"
+    # diracx configuration repo: specidy branch name with: git+https://<username>:<password>@<url>?branch=<branch>
+    DIRACX_CONFIG_BACKEND_URL: "git+https://cta_diracx:xfMzhkBrqwNjdUQwMt1p@gitlab.cta-observatory.org/cta-computing/dpps/workload/wms-configuration.git"
     DIRACX_SERVICE_AUTH_TOKEN_ISSUER: https://diracx-cert.cta-test.zeuthen.desy.de
-
   # use Majestix DBs
   sqlDbs:
     default:
