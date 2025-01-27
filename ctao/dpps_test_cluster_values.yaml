@@ -17,10 +17,10 @@ diracx:
   sqlDbs:
     default:
       # need to put this into a secret
-      rootUser: root
-      rootPassword: rRb9nsprhJsCAQx
-      user: Dirac
-      password: ctadirac
+      rootUserSecret: sql-db-secret
+      rootPasswordSecret: sql-db-secret
+      userSecret: sql-db-secret
+      passwordSecret: sql-db-secret
       host: majestix-vm1.zeuthen.desy.de:3306
     dbs:
       AuthDB:
