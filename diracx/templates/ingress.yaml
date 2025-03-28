@@ -7,9 +7,9 @@ metadata:
   labels:
     {{- include "diracx.labels" . | nindent 4 }}
   annotations:
-  {{- if index .Values "cert-manager-issuer" "enabled" }}
-    cert-manager.io/issuer: diracx-ca-issuer
-  {{- end }}
+  # {{- if index .Values "cert-manager-issuer" "enabled" }}
+  #   cert-manager.io/issuer: diracx-ca-issuer
+  # {{- end }}
   {{ with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}

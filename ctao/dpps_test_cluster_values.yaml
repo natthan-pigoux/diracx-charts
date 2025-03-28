@@ -46,6 +46,8 @@ ingress:
     # # Specific hostname used for external access
     external-dns.alpha.kubernetes.io/hostname: diracx-cert.cta-test.zeuthen.desy.de
     external-dns.alpha.kubernetes.io/target: 141.34.51.79
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-issuer # Use the cluster issuer
   # # Specific IP used for external access
   loadBalancerIP: 141.34.51.79
 
