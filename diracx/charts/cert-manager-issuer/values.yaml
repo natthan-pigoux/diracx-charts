@@ -6,7 +6,7 @@ acme:
   # email:
 
 self-signed:
-  enabled: true
+  enabled: false
 
 rbac:
   create: true
@@ -20,3 +20,8 @@ priorityClassName: ""
 
 common:
   labels: {}
+
+cluster-issuer:
+  enabled: true
+  dnsNames:
+      - vault.cta-test.zeuthen.desy.de
