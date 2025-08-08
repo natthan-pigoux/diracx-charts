@@ -1,4 +1,4 @@
-{{- if and .Values.indigoiam.enabled .Values.diracx.indigoiam.initJobEnabled }}
+{{- if and .Values.indigoiam.enabled .Values.indigoiam.initJobEnabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
